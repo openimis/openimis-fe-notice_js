@@ -1,20 +1,21 @@
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { fetchNotice, fetchNotices, toggleNoticeStatus, createNotice, updateNotice, deleteAttachment, downloadAttachment } from '../actions';
 import { graphql, formatPageQuery, formatPageQueryWithCount, formatMutation, decodeId } from '@openimis/fe-core';
 
-jest.mock('@openimis/fe-core', () => ({
-  graphql: jest.fn((payload, type, meta) => ({ payload, type, meta })),
-  formatPageQuery: jest.fn((module, filters, param) => ({ module, filters, param })),
-  formatPageQueryWithCount: jest.fn((module, prms, param) => ({ module, prms, param })),
-  formatMutation: jest.fn((name, gql, label, details) => ({
+vi.mock('@openimis/fe-core', () => ({
+  graphql: vi.fn((payload, type, meta) => ({ payload, type, meta })),
+  formatPageQuery: vi.fn((module, filters, param) => ({ module, filters, param })),
+  formatPageQueryWithCount: vi.fn((module, prms, param) => ({ module, prms, param })),
+  formatMutation: vi.fn((name, gql, label, details) => ({
     payload: { name, gql },
     clientMutationId: 'mock-id'
   })),
-  decodeId: jest.fn(id => id),
-}), { virtual: true });
+  decodeId: vi.fn(id => id),
+}));
 
 describe('Notice Actions', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('fetchNotice creates GET_NOTICE action', () => {
@@ -67,7 +68,7 @@ describe('Notice Actions', () => {
     const attachment = { uuid: 'att-uuid', mime: 'text/plain' };
     const thunk = downloadAttachment(attachment);
     expect(typeof thunk).toBe('function');
-    const dispatchMock = jest.fn().mockResolvedValue({});
+    const dispatchMock = vi.fn().mockResolvedValue({});
     await thunk(dispatchMock);
     expect(dispatchMock).toHaveBeenCalled();
   });

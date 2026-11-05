@@ -1,14 +1,15 @@
+import { describe, it, expect, vi } from "vitest";
 import reducer from '../reducer';
 
-jest.mock('@openimis/fe-core', () => ({
-  parseData: jest.fn(data => data.edges ? data.edges.map(e => e.node) : []),
-  pageInfo: jest.fn(data => data.pageInfo),
-  formatServerError: jest.fn(err => err),
-  formatGraphQLError: jest.fn(err => err),
-  dispatchMutationReq: jest.fn((state, action) => ({ ...state, submittingMutation: true })),
-  dispatchMutationResp: jest.fn((state, action) => ({ ...state, submittingMutation: false })),
-  dispatchMutationErr: jest.fn((state, action) => ({ ...state, submittingMutation: false, errorMutation: action.payload })),
-}), { virtual: true });
+vi.mock('@openimis/fe-core', () => ({
+  parseData: vi.fn(data => data.edges ? data.edges.map(e => e.node) : []),
+  pageInfo: vi.fn(data => data.pageInfo),
+  formatServerError: vi.fn(err => err),
+  formatGraphQLError: vi.fn(err => err),
+  dispatchMutationReq: vi.fn((state, action) => ({ ...state, submittingMutation: true })),
+  dispatchMutationResp: vi.fn((state, action) => ({ ...state, submittingMutation: false })),
+  dispatchMutationErr: vi.fn((state, action) => ({ ...state, submittingMutation: false, errorMutation: action.payload })),
+}));
 
 describe('Notice Reducer', () => {
   const initialState = {
